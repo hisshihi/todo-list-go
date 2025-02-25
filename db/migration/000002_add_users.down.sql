@@ -1,0 +1,3 @@
+ALTER TABLE IF EXISTS "task" DROP CONSTRAINT IF EXISTS "task_executor_fkey";
+
+DROP TABLE IF EXISTS "users"

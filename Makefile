@@ -22,8 +22,14 @@ dropdb:
 migrateup:
 	migrate -path db/migration -database "postgresql://postgres:postgres@localhost:5432/todo-list?sslmode=disable" -verbose up
 
+migrateup1:
+	migrate -path db/migration -database "postgresql://postgres:postgres@localhost:5432/todo-list?sslmode=disable" -verbose up 1
+
 migratedown:
 	migrate -path db/migration -database "postgresql://postgres:postgres@localhost:5432/todo-list?sslmode=disable" -verbose down
 
+migratedown1:
+	migrate -path db/migration -database "postgresql://postgres:postgres@localhost:5432/todo-list?sslmode=disable" -verbose down 1
+
 .PHONY:
-	run build run-build clean createdb dropdb postgres migrateup migratedown
+	run build run-build clean createdb dropdb postgres migrateup migratedown migratedown1 migrateup1
