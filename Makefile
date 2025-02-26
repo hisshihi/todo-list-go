@@ -1,14 +1,5 @@
-run:
+server:
 	go run main.go
-
-build:
-	go build -o todo-list-go main.go
-
-run-build:
-	./todo-list-go
-
-clean:
-	rm -f todo-list-go
 
 postgres:
 	docker run --name todo-list-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=todo-list -p 5432:5432 -d postgres
@@ -31,5 +22,8 @@ migratedown:
 migratedown1:
 	migrate -path db/migration -database "postgresql://postgres:postgres@localhost:5432/todo-list?sslmode=disable" -verbose down 1
 
+sqlc:
+	sqlc generate
+
 .PHONY:
-	run build run-build clean createdb dropdb postgres migrateup migratedown migratedown1 migrateup1
+	server postgres createdb dropdb migrateup migratedown migratedown1 migrateup1 sqlc
