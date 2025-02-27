@@ -51,6 +51,16 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (Task, e
 	return i, err
 }
 
+const deleteTask = `-- name: DeleteTask :exec
+DELETE FROM task
+WHERE id = $1
+`
+
+func (q *Queries) DeleteTask(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteTask, id)
+	return err
+}
+
 const getTask = `-- name: GetTask :one
 SELECT id, title, description, status, created_at, updated_at, priority, executor FROM task
 WHERE id = $1
@@ -107,4 +117,43 @@ func (q *Queries) ListTasks(ctx context.Context) ([]Task, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateTask = `-- name: UpdateTask :one
+UPDATE task
+SET title = $2, description = $3, status = $4, priority = $5, executor = $6
+WHERE id = $1
+RETURNING id, title, description, status, created_at, updated_at, priority, executor
+`
+
+type UpdateTaskParams struct {
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Status      bool   `json:"status"`
+	Priority    string `json:"priority"`
+	Executor    string `json:"executor"`
+}
+
+func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) (Task, error) {
+	row := q.db.QueryRowContext(ctx, updateTask,
+		arg.ID,
+		arg.Title,
+		arg.Description,
+		arg.Status,
+		arg.Priority,
+		arg.Executor,
+	)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Description,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Priority,
+		&i.Executor,
+	)
+	return i, err
 }
