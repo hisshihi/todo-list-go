@@ -10,6 +10,8 @@ import (
 
 type Querier interface {
 	CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error)
+	GetTask(ctx context.Context, id int64) (Task, error)
+	ListTasks(ctx context.Context) ([]Task, error)
 }
 
 var _ Querier = (*Queries)(nil)

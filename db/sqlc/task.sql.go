@@ -50,3 +50,61 @@ func (q *Queries) CreateTask(ctx context.Context, arg CreateTaskParams) (Task, e
 	)
 	return i, err
 }
+
+const getTask = `-- name: GetTask :one
+SELECT id, title, description, status, created_at, updated_at, priority, executor FROM task
+WHERE id = $1
+`
+
+func (q *Queries) GetTask(ctx context.Context, id int64) (Task, error) {
+	row := q.db.QueryRowContext(ctx, getTask, id)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Description,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Priority,
+		&i.Executor,
+	)
+	return i, err
+}
+
+const listTasks = `-- name: ListTasks :many
+SELECT id, title, description, status, created_at, updated_at, priority, executor FROM task
+ORDER BY created_at DESC
+`
+
+func (q *Queries) ListTasks(ctx context.Context) ([]Task, error) {
+	rows, err := q.db.QueryContext(ctx, listTasks)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Task{}
+	for rows.Next() {
+		var i Task
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Description,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Priority,
+			&i.Executor,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
