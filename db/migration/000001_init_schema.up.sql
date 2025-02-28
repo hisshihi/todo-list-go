@@ -1,5 +1,5 @@
 CREATE TABLE "task" (
-  "id" bigint PRIMARY KEY,
+  "id" bigserial PRIMARY KEY,
   "title" varchar NOT NULL,
   "description" varchar NOT NULL,
   "status" bool NOT NULL,
