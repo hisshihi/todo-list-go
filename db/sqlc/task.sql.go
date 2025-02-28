@@ -24,7 +24,7 @@ RETURNING id, title, description, status, created_at, updated_at, priority, exec
 type CreateTaskParams struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	Status      bool   `json:"status"`
+	Status      string `json:"status"`
 	Priority    string `json:"priority"`
 	Executor    string `json:"executor"`
 }
@@ -130,7 +130,7 @@ type UpdateTaskParams struct {
 	ID          int64  `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	Status      bool   `json:"status"`
+	Status      string `json:"status"`
 	Priority    string `json:"priority"`
 	Executor    string `json:"executor"`
 }

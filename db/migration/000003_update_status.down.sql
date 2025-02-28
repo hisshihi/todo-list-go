@@ -1,0 +1,8 @@
+ALTER TABLE task
+ALTER COLUMN status TYPE boolean USING status::boolean;
+
+ALTER TABLE task
+ALTER COLUMN status DROP DEFAULT;
+
+ALTER TABLE task
+ALTER COLUMN status SET DEFAULT true;

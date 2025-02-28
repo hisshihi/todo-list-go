@@ -1,0 +1,8 @@
+ALTER TABLE task
+ALTER COLUMN status TYPE varchar(255) USING status::varchar(255);
+
+ALTER TABLE task
+ALTER COLUMN status DROP DEFAULT;
+
+ALTER TABLE task
+ALTER COLUMN status SET DEFAULT 'active';
