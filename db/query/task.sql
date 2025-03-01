@@ -15,7 +15,8 @@ WHERE id = $1;
 
 -- name: ListTasks :many
 SELECT * FROM task
-ORDER BY created_at DESC;
+ORDER BY created_at DESC
+LIMIT $1 OFFSET $2;
 
 -- name: UpdateTask :one
 UPDATE task
