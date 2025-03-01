@@ -1,6 +1,9 @@
 server:
 	go run main.go
 
+test:
+	go test -v -cover -race -timeout 30s -count=1 ./...
+
 postgres:
 	docker run --name todo-list-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=todo-list -p 5432:5432 -d postgres
 
