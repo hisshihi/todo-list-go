@@ -43,3 +43,32 @@ func TestGetUser(t *testing.T) {
 
 	require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)
 }
+
+func TestUpdateUser(t *testing.T) {
+	user1 := CreateRandomUser(t)
+
+	arg := UpdateUserParams{
+		Username: user1.Username,
+		HashedPassword: util.RandomString(12),
+	}
+
+	user2, err := testQueries.UpdateUser(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, user2)
+
+	require.Equal(t, user2.HashedPassword, arg.HashedPassword)
+	require.Equal(t, user2.Username, user1.Username)
+	require.WithinDuration(t, user2.PasswordChangeAt, user1.PasswordChangeAt, time.Second)
+}
+
+
+func TestDeleteUser(t *testing.T) {
+	user1 := CreateRandomUser(t)
+
+	err := testQueries.DeleteUser(context.Background(), user1.Username)
+	require.NoError(t, err)
+
+	user2, err := testQueries.GetUser(context.Background(), user1.Username)
+	require.Error(t, err)
+	require.Empty(t, user2)
+}
