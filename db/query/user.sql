@@ -6,3 +6,13 @@ RETURNING *;
 -- name: GetUser :one
 SELECT * FROM users
 WHERE username = $1;
+
+-- name: UpdateUser :one
+UPDATE users
+SET hashed_password = $2
+WHERE username = $1
+RETURNING *;
+
+-- name: DeleteUser :exec
+DELETE FROM users
+WHERE username = $1;

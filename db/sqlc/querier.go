@@ -12,10 +12,12 @@ type Querier interface {
 	CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteTask(ctx context.Context, id int64) error
+	DeleteUser(ctx context.Context, username string) error
 	GetTask(ctx context.Context, id int64) (Task, error)
 	GetUser(ctx context.Context, username string) (User, error)
 	ListTasks(ctx context.Context, arg ListTasksParams) ([]Task, error)
 	UpdateTask(ctx context.Context, arg UpdateTaskParams) (Task, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)
